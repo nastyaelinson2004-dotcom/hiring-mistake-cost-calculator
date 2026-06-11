@@ -42,6 +42,13 @@
     max-width: 960px;
     margin: 0 auto;
   }
+  .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
   .eyebrow {
     font-size: 11px;
     font-weight: 700;
@@ -49,6 +56,23 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+  .credit-tag {
+    display: inline-flex;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 5px 12px;
+  }
+  .credit-tag a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 4px;
+  }
+  .credit-tag a:hover { text-decoration: underline; }
   header h1 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(26px, 5vw, 44px);
@@ -363,7 +387,10 @@
 <body>
 
 <header>
-  <div class="eyebrow">Калькулятор HR-рисков</div>
+  <div class="top-row">
+    <div class="eyebrow">Калькулятор HR-рисков</div>
+    <div class="credit-tag">Создано <a href="https://t.me/elinson_anastasiya" target="_blank" rel="noopener">@elinson_anastasiya</a></div>
+  </div>
   <h1>Цена ошибки<br><span>найма</span></h1>
   <p>Посчитайте реальные потери компании, если новый сотрудник не прошёл испытательный срок или уволился в первый год.</p>
 </header>
