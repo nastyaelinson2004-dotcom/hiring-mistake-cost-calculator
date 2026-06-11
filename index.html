@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Цена ошибки найма</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap');
+
+  :root {
+    --ink:       #0F1117;
+    --paper:     #F8F7F4;
+    --muted:     #7B7F8E;
+    --line:      #E2E0DA;
+    --red:       #C8372D;
+    --red-light: #F9EAE9;
+    --amber:     #D4830F;
+    --amber-bg:  #FEF6E8;
+    --green:     #1A7A4A;
+    --green-bg:  #E8F7EE;
+    --accent:    #2B4FD4;
+    --accent-bg: #EEF1FB;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    border-bottom: 1px solid var(--line);
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 44px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  header h1 span { color: var(--red); }
+  header p { color: var(--muted); font-size: 14px; max-width: 520px; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ROLE TABS */
+  .tabs {
+    display: flex;
+    margin: 28px 0 20px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 13px 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    border-right: 1px solid var(--line);
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn .tab-icon { font-size: 18px; }
+  .tab-btn:hover { background: var(--paper); color: var(--ink); }
+  .tab-btn.active { background: var(--ink); color: white; }
+
+  /* CONTRACT TYPE SELECTOR */
+  .contract-selector {
+    margin-bottom: 20px;
+  }
+  .contract-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .contract-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 600px) {
+    .contract-options { grid-template-columns: repeat(2, 1fr); }
+  }
+  .contract-option {
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 10px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .contract-option:hover { border-color: var(--accent); }
+  .contract-option.selected { border-color: var(--accent); background: var(--accent-bg); }
+  .co-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .co-tax {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .co-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .co-badge.low  { background: var(--green-bg); color: var(--green); }
+  .co-badge.mid  { background: var(--amber-bg); color: var(--amber); }
+  .co-badge.high { background: var(--red-light); color: var(--red); }
+
+  /* FORM GRID */
+  .form-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .tab-btn .tab-label { font-size: 11px; }
+    .tab-btn { padding: 11px 4px; }
+  }
+
+  .section-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-title::before { content: attr(data-icon); font-size: 14px; }
+
+  .field { margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+  label .hint { font-weight: 400; color: var(--muted); margin-left: 4px; }
+  .input-wrap { position: relative; display: flex; align-items: center; }
+  .input-suffix {
+    position: absolute; right: 12px;
+    font-size: 12px; font-weight: 600; color: var(--muted); pointer-events: none;
+  }
+  input[type="number"], input[type="text"] {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--line); border-radius: 8px;
+    font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 500;
+    background: var(--paper); color: var(--ink); outline: none;
+    transition: border-color 0.15s; -moz-appearance: textfield;
+  }
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input:focus { border-color: var(--accent); background: white; }
+  .has-suffix input { padding-right: 36px; }
+
+  /* Tax info row */
+  .tax-info-row {
+    grid-column: 1 / -1;
+    background: var(--amber-bg);
+    border: 1px solid #F0C570;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--amber);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tax-info-row strong { font-weight: 700; }
+
+  /* RESULT PANEL */
+  .result-panel {
+    grid-column: 1 / -1;
+    background: var(--ink);
+    color: white;
+    border-radius: 16px;
+    padding: 26px 24px 22px;
+    margin-top: 4px;
+  }
+  .result-panel .result-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; opacity: 0.5; margin-bottom: 6px;
+  }
+  .category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 166, 35, 0.15);
+    border: 1px solid rgba(245, 166, 35, 0.4);
+    color: #F5A623;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+  .category-tag span {
+    font-weight: 400;
+    color: rgba(245, 166, 35, 0.75);
+    font-size: 11px;
+  }
+  @media (max-width: 600px) {
+    .category-tag span { display: none; }
+  }
+  .result-total {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 6vw, 50px);
+    font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: white;
+  }
+  .result-total .currency { font-size: 0.52em; opacity: 0.6; vertical-align: super; }
+  .result-multiplier { margin-top: 8px; font-size: 13px; opacity: 0.6; }
+  .result-multiplier span { color: #F5A623; font-weight: 700; opacity: 1; }
+
+  /* BREAKDOWN CARDS — CLICKABLE */
+  .breakdown {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .breakdown-item {
+    background: rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 13px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    border: 1.5px solid transparent;
+    position: relative;
+  }
+  .breakdown-item:hover {
+    background: rgba(255,255,255,0.13);
+    border-color: rgba(255,255,255,0.2);
+  }
+  .breakdown-item.active {
+    background: rgba(255,255,255,0.15);
+    border-color: #F5A623;
+  }
+  .bi-label { font-size: 11px; opacity: 0.5; margin-bottom: 4px; font-weight: 500; }
+  .bi-value { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .bi-value.zero { opacity: 0.3; }
+  .bi-hint { font-size: 9px; opacity: 0.4; margin-top: 3px; font-weight: 500; }
+
+  /* FORMULA POPUP */
+  .formula-popup {
+    grid-column: 1 / -1;
+    background: #1C2035;
+    border: 1.5px solid #F5A623;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: -4px;
+    display: none;
+    animation: fadeIn 0.15s ease;
+  }
+  .formula-popup.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .fp-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #F5A623; margin-bottom: 8px;
+  }
+  .fp-formula {
+    font-family: 'Courier New', monospace;
+    font-size: 13px; color: #A8D4FF; margin-bottom: 10px; line-height: 1.6;
+  }
+  .fp-values {
+    font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.7;
+  }
+  .fp-result {
+    margin-top: 10px;
+    font-size: 15px; font-weight: 700; color: white;
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;
+  }
+  .fp-note {
+    margin-top: 6px;
+    font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  }
+
+  /* RISK */
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 100px;
+    font-size: 12px; font-weight: 700; margin-top: 14px; letter-spacing: 0.02em;
+  }
+  .risk-badge.low  { background: var(--green-bg); color: var(--green); }
+  .risk-badge.mid  { background: var(--amber-bg); color: var(--amber); }
+  .risk-badge.high { background: var(--red-light); color: var(--red); }
+
+  /* EXPLAINER */
+  .explainer {
+    grid-column: 1 / -1;
+    background: var(--accent-bg);
+    border-radius: 12px; padding: 14px 18px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .explainer-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .explainer p { font-size: 13px; color: var(--accent); line-height: 1.5; }
+  .explainer strong { font-weight: 700; }
+
+  .reset-btn {
+    display: block; margin: 20px auto 0;
+    padding: 11px 26px; background: transparent;
+    border: 1.5px solid var(--line); border-radius: 100px;
+    font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--muted); cursor: pointer; transition: all 0.15s;
+  }
+  .reset-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  footer {
+    text-align: center; padding: 20px; font-size: 12px; color: var(--muted);
+    border-top: 1px solid var(--line); max-width: 960px; margin: 0 auto;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: contents; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Калькулятор HR-рисков</div>
+  <h1>Цена ошибки<br><span>найма</span></h1>
+  <p>Посчитайте реальные потери компании, если новый сотрудник не прошёл испытательный срок или уволился в первый год.</p>
+</header>
+
+<div class="container">
+
+  <!-- ROLE TABS -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('linear')" id="tab-linear">
+      <span class="tab-icon">👤</span>
+      <span class="tab-label">Линейный персонал</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('top')" id="tab-top">
+      <span class="tab-icon">🏆</span>
+      <span class="tab-label">ТОП-менеджмент</span>
+    </button>
+  </div>
+
+  <!-- CONTRACT TYPE -->
+  <div class="contract-selector">
+    <div class="contract-label">Формат оформления сотрудника</div>
+    <div class="contract-options">
+      <div class="contract-option selected" onclick="selectContract('tk')" id="ct-tk">
+        <div class="co-name">ТК РФ</div>
+        <div class="co-tax">Взносы: +30,2% к gross<br>НДФЛ: 13–15% из gross</div>
+        <span class="co-badge high">Макс. нагрузка</span>
+      </div>
+      <div class="contract-option" onclick="selectContract('gph')" id="ct-gph">
+        <div class="co-name">ГПХ</div>
+        <div class="co-tax">Взносы: +27,1% к gross<br>НДФЛ: 13–15% из gross</div>
+        <span class="co-badge mid">Чуть ниже</span>
+      </div>
+      <div class="contract-option" onclick="selectContract('ip')" id="ct-ip">
+        <div class="co-name">ИП (УСН 6%)</div>
+        <div class="co-tax">Взносы: фикс. ~50 тыс/год<br>Налог: 6% — за счёт ИП</div>
+        <span class="co-badge low">Низкая нагрузка</span>
+      </div>
+      <div class="contract-option" onclick="selectContract('smz_comp')" id="ct-smz_comp">
+        <div class="co-name">Самозанятый</div>
+        <div class="co-tax">НПД: 6% — платит компания<br>Никаких взносов</div>
+        <span class="co-badge low">Мин. нагрузка</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+
+    <!-- ══ ЛИНЕЙНЫЙ ══ -->
+    <div class="panel active" id="panel-linear">
+
+      <div class="tax-info-row" id="l-tax-info">
+        <span>⚖️</span>
+        <span id="l-tax-text">ТК РФ: работодатель платит <strong>+30,2%</strong> страховых взносов сверх gross-оклада. НДФЛ 13–15% удерживается из зарплаты сотрудника — не доп. расход компании.</span>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="💰">Финансы</div>
+        <div class="field">
+          <label>Ежемесячный оклад (gross)</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-salary" value="80000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Вознаграждение рекрутеру</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-recruiter-fee" value="80000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Затраты на размещение вакансии</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-job-post" value="15000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Расходы на рабочее место <span class="hint">техника, ПО</span></label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-workspace" value="25000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="⏱">Время</div>
+        <div class="field">
+          <label>Срок закрытия вакансии</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-search-time" value="6" min="0" step="0.5" oninput="calc()">
+            <span class="input-suffix">нед.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Срок работы до ухода</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-tenure" value="4" min="0" step="0.5" oninput="calc()">
+            <span class="input-suffix">мес.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Время руководителя на адаптацию</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-manager-hours" value="5" min="0" oninput="calc()">
+            <span class="input-suffix">ч/нед.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Стоимость часа руководителя</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-manager-rate" value="3000" min="0" oninput="calc()">
+            <span class="input-suffix">₽/ч</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Недели до полной продуктивности</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-ramp" value="8" min="0" oninput="calc()">
+            <span class="input-suffix">нед.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="📉">Потери производительности</div>
+        <div class="field">
+          <label>Упущенная выручка/мес. в период простоя</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-lost-revenue" value="200000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Клиентов/сделок потеряно <span class="hint">оценка</span></label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-lost-clients" value="3" min="0" oninput="calc()">
+            <span class="input-suffix">шт.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Средняя стоимость одного клиента</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="l-client-value" value="50000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-panel">
+        <div class="category-tag">👤 Расчёт для линейного персонала <span>(менеджер по продажам, логист, рекрутер и т.п.)</span></div>
+        <div class="result-label">Итоговая стоимость ошибки найма</div>
+        <div class="result-total"><span class="currency">₽</span> <span id="l-total">—</span></div>
+        <div class="result-multiplier" id="l-multiplier"></div>
+        <div class="breakdown" id="l-breakdown"></div>
+        <div class="formula-popup" id="l-formula-popup">
+          <div class="fp-title" id="l-fp-title"></div>
+          <div class="fp-formula" id="l-fp-formula"></div>
+          <div class="fp-values" id="l-fp-values"></div>
+          <div class="fp-result" id="l-fp-result"></div>
+          <div class="fp-note" id="l-fp-note"></div>
+        </div>
+        <div id="l-risk"></div>
+      </div>
+
+      <div class="explainer">
+        <div class="explainer-icon">💡</div>
+        <p>По данным SHRM, замена линейного сотрудника стоит <strong>от 50% до 200%</strong> его годового оклада. Нажмите на любую карточку ниже, чтобы увидеть формулу расчёта.</p>
+      </div>
+    </div>
+
+    <!-- ══ ТОП-МЕНЕДЖМЕНТ ══ -->
+    <div class="panel" id="panel-top">
+
+      <div class="tax-info-row" id="t-tax-info">
+        <span>⚖️</span>
+        <span id="t-tax-text">ТК РФ: работодатель платит <strong>+30,2%</strong> страховых взносов сверх gross-оклада. НДФЛ 13–15% удерживается из зарплаты сотрудника — не доп. расход компании.</span>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="💰">Финансы</div>
+        <div class="field">
+          <label>Ежемесячный оклад (gross)</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-salary" value="350000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Бонусная часть / год</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-bonus" value="1200000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Вознаграждение рекрутеру / хедхантеру</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-recruiter-fee" value="700000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Расходы на рабочее место, авто</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-workspace" value="150000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Компенсационный пакет <span class="hint">ДМС, телефон</span></label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-benefits" value="80000" min="0" oninput="calc()">
+            <span class="input-suffix">₽/мес.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="⏱">Время</div>
+        <div class="field">
+          <label>Срок закрытия вакансии</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-search-time" value="16" min="0" oninput="calc()">
+            <span class="input-suffix">нед.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Срок работы до ухода</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-tenure" value="8" min="0" step="0.5" oninput="calc()">
+            <span class="input-suffix">мес.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Время CEO на онбординг <span class="hint">ч/нед.</span></label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-ceo-hours" value="10" min="0" oninput="calc()">
+            <span class="input-suffix">ч/нед.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Стоимость часа CEO / собственника</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-ceo-rate" value="15000" min="0" oninput="calc()">
+            <span class="input-suffix">₽/ч</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Месяцев до полной продуктивности</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-ramp" value="6" min="0" oninput="calc()">
+            <span class="input-suffix">мес.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="🔥">Стратегические потери</div>
+        <div class="field">
+          <label>Просаженная выручка/мес. из-за вакуума</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-lost-revenue" value="3000000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Ключевых сотрудников ушло за ТОПом</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-team-turnover" value="2" min="0" oninput="calc()">
+            <span class="input-suffix">чел.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Затраты на замену одного ушедшего</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-team-replace-cost" value="250000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Сорванных проектов / сделок</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-lost-deals" value="2" min="0" oninput="calc()">
+            <span class="input-suffix">шт.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Стоимость сорванного проекта</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-deal-value" value="5000000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title" data-icon="📄">Расставание</div>
+        <div class="field">
+          <label>Выходное пособие</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-severance" value="0" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Юридические расходы на расторжение</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="t-legal" value="50000" min="0" oninput="calc()">
+            <span class="input-suffix">₽</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-panel">
+        <div class="category-tag">🏆 Расчёт для ТОП-менеджмента <span>(коммерческий, финансовый, технический директор и т.п.)</span></div>
+        <div class="result-label">Итоговая стоимость ошибки найма ТОПа</div>
+        <div class="result-total"><span class="currency">₽</span> <span id="t-total">—</span></div>
+        <div class="result-multiplier" id="t-multiplier"></div>
+        <div class="breakdown" id="t-breakdown"></div>
+        <div class="formula-popup" id="t-formula-popup">
+          <div class="fp-title" id="t-fp-title"></div>
+          <div class="fp-formula" id="t-fp-formula"></div>
+          <div class="fp-values" id="t-fp-values"></div>
+          <div class="fp-result" id="t-fp-result"></div>
+          <div class="fp-note" id="t-fp-note"></div>
+        </div>
+        <div id="t-risk"></div>
+      </div>
+
+      <div class="explainer">
+        <div class="explainer-icon">⚠️</div>
+        <p>По оценкам Harvard Business Review, неудачный найм ТОПа обходится в <strong>15–27 месячных окладов</strong>. Нажмите на карточку — увидите формулу.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Сбросить к примеру</button>
+</div>
+
+<footer>
+  Все расчёты носят оценочный характер и основаны на ваших вводных данных.<br>
+  Не является юридическим или финансовым документом.
+</footer>
+
+<script>
+let currentTab = 'linear';
+let currentContract = 'tk';
+let activeCardL = null;
+let activeCardT = null;
+
+// Tax configs per contract type
+const TAX_CONFIGS = {
+  tk: {
+    name: 'ТК РФ',
+    employerRate: 0.302, // страховые взносы сверх gross (ОПС 22% + ОМС 5.1% + ФСС 2.9% + травматизм 0.2%)
+    paidBy: 'employer',
+    infoL: 'ТК РФ: работодатель платит <strong>+30,2%</strong> страховых взносов сверх gross-оклада (ОПС 22% + ОМС 5,1% + ФСС 2,9% + травматизм ≈0,2%). НДФЛ 13–15% удерживается из зарплаты сотрудника — не доп. расход для компании.',
+    note: 'Взносы: ОПС 22% + ОМС 5,1% + ФСС 2,9% + травматизм 0,2% = 30,2% сверх gross. Согласно НК РФ ст. 419–425.',
+  },
+  gph: {
+    name: 'ГПХ',
+    employerRate: 0.271, // ОПС 22% + ОМС 5.1% — нет ФСС 2.9%, нет травматизма (по общему правилу)
+    paidBy: 'employer',
+    infoL: 'ГПХ: работодатель платит <strong>+27,1%</strong> взносов (ОПС 22% + ОМС 5,1%). ФСС и травматизм — только если прямо указано в договоре. НДФЛ 13–15% удерживается из вознаграждения.',
+    note: 'Взносы по ГПХ: ОПС 22% + ОМС 5,1% = 27,1%. ФСС (2,9%) не начисляется по умолчанию. НК РФ ст. 420.',
+  },
+  ip: {
+    name: 'ИП (УСН 6%)',
+    employerRate: 0, // ИП сам платит фиксированные взносы ~50 тыс/год
+    fixedFee: 49500, // фикс. взносы ИП в год (2024)
+    paidBy: 'self',
+    infoL: 'ИП (УСН 6%): компания платит вознаграждение без взносов. ИП сам платит <strong>6%</strong> налог и фиксированные взносы ≈49 500 ₽/год. Для компании — нулевая нагрузка сверх суммы договора.',
+    note: 'Страховые взносы ИП: фикс. часть ~49 500 ₽/год (2024) + 1% с дохода свыше 300 тыс. Налог УСН 6% — за счёт ИП. Компания не несёт доп. взносов.',
+  },
+  smz_comp: {
+    name: 'Самозанятый',
+    employerRate: 0.06, // компания компенсирует НПД 6%
+    paidBy: 'company_compensates',
+    infoL: 'Самозанятый: НПД <strong>6%</strong> — платит сам самозанятый, но в данном расчёте учитываем, что компания компенсирует налог (распространённая практика). Никаких страховых взносов.',
+    note: 'НПД ставка 6% при работе с юрлицом (ФЗ-422). Взносы в ПФР и ФСС отсутствуют. Лимит дохода самозанятого — 2,4 млн ₽/год.',
+  },
+};
+
+function selectContract(type) {
+  currentContract = type;
+  document.querySelectorAll('.contract-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('ct-' + type).classList.add('selected');
+  updateTaxInfo();
+  calc();
+}
+
+function updateTaxInfo() {
+  const cfg = TAX_CONFIGS[currentContract];
+  document.getElementById('l-tax-text').innerHTML = cfg.infoL;
+  document.getElementById('t-tax-text').innerHTML = cfg.infoL;
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('panel-linear').classList.toggle('active', tab === 'linear');
+  document.getElementById('panel-top').classList.toggle('active', tab === 'top');
+  document.getElementById('tab-linear').classList.toggle('active', tab === 'linear');
+  document.getElementById('tab-top').classList.toggle('active', tab === 'top');
+  activeCardL = null;
+  activeCardT = null;
+  calc();
+}
+
+function fmt(n) {
+  if (n === 0) return '0';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace('.0', '') + ' млн';
+  if (n >= 1_000) return Math.round(n / 1000) + ' тыс.';
+  return Math.round(n).toString();
+}
+
+function fmtFull(n) {
+  return Math.round(n).toLocaleString('ru-RU');
+}
+
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? (parseFloat(el.value) || 0) : 0;
+}
+
+function getTaxBurden(salaryPaid, months) {
+  const cfg = TAX_CONFIGS[currentContract];
+  if (cfg.paidBy === 'employer') {
+    return salaryPaid * cfg.employerRate;
+  } else if (cfg.paidBy === 'company_compensates') {
+    return salaryPaid * cfg.employerRate; // 6% компенсация НПД
+  } else if (cfg.paidBy === 'self') {
+    // ИП: фикс взносы пропорционально сроку
+    return (cfg.fixedFee / 12) * months;
+  }
+  return 0;
+}
+
+function getTaxLabel() {
+  const cfg = TAX_CONFIGS[currentContract];
+  if (cfg.name === 'ТК РФ') return 'Взносы работодателя (+30,2%)';
+  if (cfg.name === 'ГПХ') return 'Взносы работодателя (+27,1%)';
+  if (cfg.name === 'ИП (УСН 6%)') return 'Взносы ИП (фикс. часть)';
+  if (cfg.name === 'Самозанятый') return 'Компенсация НПД (6%)';
+  return 'Налоговая нагрузка';
+}
+
+function getTaxFormula(salaryPaid, months, result) {
+  const cfg = TAX_CONFIGS[currentContract];
+  if (cfg.name === 'ТК РФ') return {
+    formula: 'Gross × месяцы × 30,2%',
+    values: `${fmtFull(salaryPaid)} × 30,2% = ${fmtFull(result)} ₽`,
+    note: cfg.note,
+  };
+  if (cfg.name === 'ГПХ') return {
+    formula: 'Вознаграждение × месяцы × 27,1%',
+    values: `${fmtFull(salaryPaid)} × 27,1% = ${fmtFull(result)} ₽`,
+    note: cfg.note,
+  };
+  if (cfg.name === 'ИП (УСН 6%)') return {
+    formula: '(49 500 ₽ / 12) × кол-во месяцев',
+    values: `(49 500 / 12) × ${months} мес = ${fmtFull(result)} ₽`,
+    note: cfg.note,
+  };
+  if (cfg.name === 'Самозанятый') return {
+    formula: 'Вознаграждение × 6% (компенсация НПД)',
+    values: `${fmtFull(salaryPaid)} × 6% = ${fmtFull(result)} ₽`,
+    note: cfg.note,
+  };
+  return { formula: '', values: '', note: '' };
+}
+
+// ─── LINEAR ───────────────────────────────────────────────
+function calcLinear() {
+  const salary       = v('l-salary');
+  const recruiterFee = v('l-recruiter-fee');
+  const jobPost      = v('l-job-post');
+  const workspace    = v('l-workspace');
+  const searchWeeks  = v('l-search-time');
+  const tenure       = v('l-tenure');
+  const mgrHours     = v('l-manager-hours');
+  const mgrRate      = v('l-manager-rate');
+  const rampWeeks    = v('l-ramp');
+  const lostRev      = v('l-lost-revenue');
+  const lostClients  = v('l-lost-clients');
+  const clientVal    = v('l-client-value');
+
+  const salaryPaid   = salary * tenure;
+  const taxBurden    = getTaxBurden(salaryPaid, tenure);
+  const recruitCost  = recruiterFee + jobPost;
+  const workspaceCost= workspace;
+  const mgrCost      = mgrHours * (searchWeeks + rampWeeks) * mgrRate;
+  const vacancyLoss  = lostRev * (searchWeeks / 4.33);
+  const clientLoss   = lostClients * clientVal;
+  const rampLoss     = (salary / 4.33) * rampWeeks * 0.5;
+  const total        = salaryPaid + taxBurden + recruitCost + workspaceCost + mgrCost + vacancyLoss + clientLoss + rampLoss;
+
+  document.getElementById('l-total').textContent = fmtFull(Math.round(total));
+  const mult = salary * 12 > 0 ? (total / (salary * 12) * 100).toFixed(0) : 0;
+  document.getElementById('l-multiplier').innerHTML = `Это <span>${mult}%</span> годового оклада`;
+
+  const taxInfo = getTaxFormula(salaryPaid, tenure, taxBurden);
+
+  const items = [
+    {
+      label: 'Выплачено зарплаты',
+      val: salaryPaid,
+      formula: 'Оклад (gross) × срок работы',
+      values: `${fmtFull(salary)} ₽ × ${tenure} мес`,
+      note: 'Все выплаченные gross-оклады за период работы сотрудника до увольнения.',
+    },
+    {
+      label: getTaxLabel(),
+      val: taxBurden,
+      formula: taxInfo.formula,
+      values: taxInfo.values,
+      note: taxInfo.note,
+    },
+    {
+      label: 'Подбор и вакансия',
+      val: recruitCost,
+      formula: 'Вознаграждение рекрутеру + размещение',
+      values: `${fmtFull(recruiterFee)} + ${fmtFull(jobPost)} = ${fmtFull(recruitCost)} ₽`,
+      note: 'Единоразовые расходы на поиск кандидата. Придётся потратить снова при следующем найме.',
+    },
+    {
+      label: 'Рабочее место',
+      val: workspaceCost,
+      formula: 'Разовые затраты на оснащение',
+      values: `${fmtFull(workspace)} ₽ (разово)`,
+      note: 'Техника, лицензии ПО, мебель, доступы. Часть расходов невозвратна.',
+    },
+    {
+      label: 'Время руководителя',
+      val: mgrCost,
+      formula: 'Ч/нед × (недели поиска + недели рампапа) × ставка/ч',
+      values: `${mgrHours} ч × (${searchWeeks} + ${rampWeeks}) нед × ${fmtFull(mgrRate)} ₽/ч = ${fmtFull(mgrCost)} ₽`,
+      note: 'Альтернативная стоимость времени руководителя — пока он адаптирует сотрудника, он не занимается своей основной работой.',
+    },
+    {
+      label: 'Простой вакансии',
+      val: vacancyLoss,
+      formula: 'Упущенная выручка/мес × (недели поиска ÷ 4,33)',
+      values: `${fmtFull(lostRev)} ₽ × (${searchWeeks} / 4,33) = ${fmtFull(vacancyLoss)} ₽`,
+      note: '4,33 — среднее число недель в месяце. Это выручка, которую генерировал бы сотрудник, если бы уже работал.',
+    },
+    {
+      label: 'Потеря клиентов',
+      val: clientLoss,
+      formula: 'Кол-во потерянных клиентов × стоимость одного',
+      values: `${lostClients} шт × ${fmtFull(clientVal)} ₽ = ${fmtFull(clientLoss)} ₽`,
+      note: 'Клиенты, потерянные из-за низкого сервиса, ошибок или разрыва отношений в период адаптации.',
+    },
+    {
+      label: 'Неполная продуктивность',
+      val: rampLoss,
+      formula: '(Оклад / 4,33) × недели рампапа × 50%',
+      values: `(${fmtFull(salary)} / 4,33) × ${rampWeeks} нед × 0,5 = ${fmtFull(rampLoss)} ₽`,
+      note: 'В период обучения сотрудник работает примерно на 50% мощности. Потеря — упущенная стоимость труда.',
+    },
+  ];
+
+  renderBreakdown('l', items, total);
+
+  const risk = total < 300000 ? ['low','🟢','Умеренный риск']
+             : total < 800000 ? ['mid','🟡','Заметные потери']
+             :                  ['high','🔴','Критические потери'];
+  document.getElementById('l-risk').innerHTML =
+    `<div class="risk-badge ${risk[0]}">${risk[1]} ${risk[2]}</div>`;
+}
+
+// ─── TOP ──────────────────────────────────────────────────
+function calcTop() {
+  const salary      = v('t-salary');
+  const bonus       = v('t-bonus');
+  const recruiterFee= v('t-recruiter-fee');
+  const workspace   = v('t-workspace');
+  const benefits    = v('t-benefits');
+  const searchWeeks = v('t-search-time');
+  const tenure      = v('t-tenure');
+  const ceoHours    = v('t-ceo-hours');
+  const ceoRate     = v('t-ceo-rate');
+  const rampMonths  = v('t-ramp');
+  const lostRev     = v('t-lost-revenue');
+  const teamTurnover= v('t-team-turnover');
+  const teamReplace = v('t-team-replace-cost');
+  const lostDeals   = v('t-lost-deals');
+  const dealValue   = v('t-deal-value');
+  const severance   = v('t-severance');
+  const legal       = v('t-legal');
+
+  const salaryPaid  = salary * tenure;
+  const taxBurden   = getTaxBurden(salaryPaid, tenure);
+  const bonusPro    = bonus / 12 * tenure;
+  const benefitsPaid= benefits * tenure;
+  const recruitCost = recruiterFee + workspace;
+  const ceoCost     = ceoHours * searchWeeks * ceoRate;
+  const onboardCost = ceoHours * (rampMonths * 4.33) * ceoRate;
+  const vacancyLoss = lostRev * (searchWeeks / 4.33);
+  const rampLoss    = lostRev * rampMonths * 0.4;
+  const teamLoss    = teamTurnover * teamReplace;
+  const dealLoss    = lostDeals * dealValue;
+  const exitCost    = severance + legal;
+  const total       = salaryPaid + taxBurden + bonusPro + benefitsPaid + recruitCost +
+                      ceoCost + onboardCost + vacancyLoss + rampLoss + teamLoss + dealLoss + exitCost;
+
+  document.getElementById('t-total').textContent = fmtFull(Math.round(total));
+  const months = salary > 0 ? (total / salary).toFixed(1) : 0;
+  document.getElementById('t-multiplier').innerHTML = `Это <span>${months}</span> месячных окладов`;
+
+  const taxInfo = getTaxFormula(salaryPaid, tenure, taxBurden);
+
+  const items = [
+    {
+      label: 'Выплачено зарплаты',
+      val: salaryPaid,
+      formula: 'Оклад (gross) × срок работы',
+      values: `${fmtFull(salary)} ₽ × ${tenure} мес`,
+      note: 'Все gross-оклады за период фактической работы ТОП-менеджера.',
+    },
+    {
+      label: getTaxLabel(),
+      val: taxBurden,
+      formula: taxInfo.formula,
+      values: taxInfo.values,
+      note: taxInfo.note,
+    },
+    {
+      label: 'Бонусы (пропорц.)',
+      val: bonusPro,
+      formula: 'Годовой бонус / 12 × срок работы',
+      values: `${fmtFull(bonus)} / 12 × ${tenure} мес = ${fmtFull(bonusPro)} ₽`,
+      note: 'Бонусы, выплаченные пропорционально сроку работы. Часть может быть невозвратна по договору.',
+    },
+    {
+      label: 'Льготы / бенефиты',
+      val: benefitsPaid,
+      formula: 'Бенефиты в мес × срок работы',
+      values: `${fmtFull(benefits)} ₽ × ${tenure} мес = ${fmtFull(benefitsPaid)} ₽`,
+      note: 'ДМС, корпоративный телефон, страховки — затраты, которые уже понесены.',
+    },
+    {
+      label: 'Подбор / headhunter',
+      val: recruitCost,
+      formula: 'Гонорар хедхантера + рабочее место',
+      values: `${fmtFull(recruiterFee)} + ${fmtFull(workspace)} = ${fmtFull(recruitCost)} ₽`,
+      note: 'Гонорар хедхантера обычно 15–30% годового дохода. Придётся оплатить снова.',
+    },
+    {
+      label: 'Время CEO на онбординг',
+      val: ceoCost + onboardCost,
+      formula: 'Ч/нед × (недели поиска + недели рампапа × 4,33) × ставка CEO',
+      values: `${ceoHours} ч × (${searchWeeks} + ${rampMonths}×4,33) нед × ${fmtFull(ceoRate)} = ${fmtFull(ceoCost + onboardCost)} ₽`,
+      note: 'Собственник тратит время на интервью, онбординг и кураторство — это дорогой ресурс.',
+    },
+    {
+      label: 'Вакуум управления',
+      val: vacancyLoss,
+      formula: 'Упущенная выручка/мес × (недели поиска ÷ 4,33)',
+      values: `${fmtFull(lostRev)} × (${searchWeeks} / 4,33) = ${fmtFull(vacancyLoss)} ₽`,
+      note: 'Без ТОПа подразделение теряет в эффективности. Оценка: 100% упущенной выручки за период вакансии.',
+    },
+    {
+      label: 'Неполная продуктивность',
+      val: rampLoss,
+      formula: 'Упущенная выручка/мес × месяцы рампапа × 40%',
+      values: `${fmtFull(lostRev)} × ${rampMonths} мес × 40% = ${fmtFull(rampLoss)} ₽`,
+      note: 'Новый ТОП выходит на полную продуктивность постепенно. Средняя потеря оценивается в 40% потенциала.',
+    },
+    {
+      label: 'Текучка в команде',
+      val: teamLoss,
+      formula: 'Кол-во ушедших × затраты на замену одного',
+      values: `${teamTurnover} чел × ${fmtFull(teamReplace)} ₽ = ${fmtFull(teamLoss)} ₽`,
+      note: 'Уход ТОПа часто провоцирует уход ключевых людей его команды или тех, кого он привёл.',
+    },
+    {
+      label: 'Сорванные проекты',
+      val: dealLoss,
+      formula: 'Кол-во сорванных сделок × стоимость одной',
+      values: `${lostDeals} шт × ${fmtFull(dealValue)} ₽ = ${fmtFull(dealLoss)} ₽`,
+      note: 'Проекты и сделки, зависящие от ТОПа лично, могут сорваться в момент его ухода.',
+    },
+    {
+      label: 'Расторжение / юрист',
+      val: exitCost,
+      formula: 'Выходное пособие + юридические расходы',
+      values: `${fmtFull(severance)} + ${fmtFull(legal)} = ${fmtFull(exitCost)} ₽`,
+      note: 'Выходное пособие по соглашению сторон и расходы на юридическое сопровождение расторжения.',
+    },
+  ];
+
+  renderBreakdown('t', items, total);
+
+  const risk = total < 3_000_000 ? ['low','🟢','Умеренный риск']
+             : total < 10_000_000 ? ['mid','🟡','Существенные потери']
+             :                      ['high','🔴','Катастрофические потери'];
+  document.getElementById('t-risk').innerHTML =
+    `<div class="risk-badge ${risk[0]}">${risk[1]} ${risk[2]}</div>`;
+}
+
+// ─── RENDER BREAKDOWN WITH CLICKABLE CARDS ────────────────
+function renderBreakdown(prefix, items, total) {
+  const container = document.getElementById(prefix + '-breakdown');
+  const popup = document.getElementById(prefix + '-formula-popup');
+
+  container.innerHTML = items.map((item, i) =>
+    `<div class="breakdown-item" onclick="toggleFormula('${prefix}', ${i})" data-idx="${i}">
+      <div class="bi-label">${item.label}</div>
+      <div class="bi-value ${item.val === 0 ? 'zero' : ''}">₽ ${fmt(item.val)}</div>
+      <div class="bi-hint">${item.val > 0 ? ((item.val / total * 100).toFixed(0) + '% от итога · нажмите') : 'нажмите'}</div>
+    </div>`
+  ).join('');
+
+  // store items for click handler
+  container._items = items;
+
+  // reset popup
+  popup.classList.remove('visible');
+  if (prefix === 'l') activeCardL = null;
+  else activeCardT = null;
+}
+
+function toggleFormula(prefix, idx) {
+  const container = document.getElementById(prefix + '-breakdown');
+  const popup = document.getElementById(prefix + '-formula-popup');
+  const items = container._items;
+  const item = items[idx];
+
+  const activeVar = prefix === 'l' ? 'activeCardL' : 'activeCardT';
+  const currentActive = prefix === 'l' ? activeCardL : activeCardT;
+
+  // Deselect all cards
+  container.querySelectorAll('.breakdown-item').forEach(c => c.classList.remove('active'));
+
+  if (currentActive === idx) {
+    // toggle off
+    popup.classList.remove('visible');
+    if (prefix === 'l') activeCardL = null;
+    else activeCardT = null;
+    return;
+  }
+
+  // Select clicked
+  container.querySelectorAll('.breakdown-item')[idx].classList.add('active');
+  if (prefix === 'l') activeCardL = idx;
+  else activeCardT = idx;
+
+  document.getElementById(prefix + '-fp-title').textContent = '📐 ' + item.label;
+  document.getElementById(prefix + '-fp-formula').textContent = item.formula;
+  document.getElementById(prefix + '-fp-values').innerHTML = item.values;
+  document.getElementById(prefix + '-fp-result').innerHTML =
+    `Итого: <strong>₽ ${fmtFull(item.val)}</strong>`;
+  document.getElementById(prefix + '-fp-note').textContent = item.note || '';
+
+  popup.classList.add('visible');
+}
+
+function calc() {
+  if (currentTab === 'linear') calcLinear();
+  else calcTop();
+}
+
+function resetAll() {
+  const defaults = {
+    'l-salary': 80000, 'l-recruiter-fee': 80000, 'l-job-post': 15000,
+    'l-workspace': 25000, 'l-search-time': 6, 'l-tenure': 4,
+    'l-manager-hours': 5, 'l-manager-rate': 3000, 'l-ramp': 8,
+    'l-lost-revenue': 200000, 'l-lost-clients': 3, 'l-client-value': 50000,
+    't-salary': 350000, 't-bonus': 1200000, 't-recruiter-fee': 700000,
+    't-workspace': 150000, 't-benefits': 80000, 't-search-time': 16,
+    't-tenure': 8, 't-ceo-hours': 10, 't-ceo-rate': 15000, 't-ramp': 6,
+    't-lost-revenue': 3000000, 't-team-turnover': 2, 't-team-replace-cost': 250000,
+    't-lost-deals': 2, 't-deal-value': 5000000, 't-severance': 0, 't-legal': 50000,
+  };
+  for (const [id, val] of Object.entries(defaults)) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  }
+  activeCardL = null;
+  activeCardT = null;
+  calc();
+}
+
+updateTaxInfo();
+calc();
+</script>
+</body>
+</html>
